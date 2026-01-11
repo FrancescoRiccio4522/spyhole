@@ -1,0 +1,28 @@
+body {
+    font-family: Optima, "Segoe UI", Candara, "Noto Sans", source-sans-pro, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    margin-top: 20px;
+}
+form {
+    margin-top: 30px;
+}
+input[type="file"] {
+    margin-bottom: 10px;
+}
+button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #4cae4c;
+}

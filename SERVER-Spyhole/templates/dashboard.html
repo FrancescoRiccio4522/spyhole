@@ -1,0 +1,163 @@
+{% extends "base.html" %} {% block title %}Registro Accessi - Spyhole{% endblock
+%} {% block body %}
+<div class="min-h-screen bg-background py-8">
+  <!-- Header Section -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+    <div class="bg-white rounded-lg shadow-sm border border-border p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-foreground mb-2">
+            Registro Accessi
+          </h1>
+          <p class="text-muted-foreground">
+            Monitoraggio in tempo reale degli accessi riconosciuti
+          </p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+          <span class="text-sm text-muted-foreground"
+            >Aggiornamento automatico</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log Container -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div id="log-container" class="space-y-4">
+      <!-- Il contenuto verrà inserito dinamicamente da JavaScript -->
+      <div class="flex items-center justify-center py-12">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function fetchLog() {
+    try {
+      const res = await fetch("/api/log");
+      if (!res.ok) throw new Error("Errore nel recupero del log");
+      const log = await res.json();
+
+      const container = document.getElementById("log-container");
+
+      // Se il log è vuoto, mostra un messaggio
+      if (log.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-lg shadow-sm border border-border p-8 text-center">
+            <svg class="w-16 h-16 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <p class="text-muted-foreground text-lg">Nessun accesso registrato</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = ""; // pulisci il contenuto
+
+      // Cicla in reverse per mostrare i più recenti prima
+      for (let i = log.length - 1; i >= 0; i--) {
+        const item = log[i];
+
+        const entry = document.createElement("div");
+        entry.className =
+          "bg-white rounded-lg shadow-sm border border-border overflow-hidden hover:shadow-md transition-shadow animate-fade-in";
+
+        entry.innerHTML = `
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+            <!-- Immagine -->
+            <div class="flex-shrink-0">
+              <img 
+                src="/images/${item.filename}" 
+                alt="Accesso registrato" 
+                class="w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 ${
+                  item.recognized ? "border-green-500" : "border-red-500"
+                }"
+              />
+            </div>
+            
+            <!-- Dettagli -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between mb-2">
+                <div>
+                  <h3 class="text-lg font-semibold text-foreground mb-1">
+                    ${item.recognized ? item.name : "Sconosciuto"}
+                  </h3>
+                  <p class="text-sm text-muted-foreground">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    ${formatTimestamp(item.timestamp)}
+                  </p>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-medium ${
+                  item.recognized
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }">
+                  ${item.recognized ? "✓ Riconosciuto" : "✗ Non riconosciuto"}
+                </span>
+              </div>
+              
+              ${
+                item.recognized
+                  ? `
+                <div class="flex items-center text-sm text-green-600">
+                  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  Accesso autorizzato
+                </div>
+              `
+                  : `
+                <div class="flex items-center text-sm text-red-600">
+                  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                  </svg>
+                  Accesso negato
+                </div>
+              `
+              }
+            </div>
+          </div>
+        `;
+
+        container.appendChild(entry);
+      }
+    } catch (error) {
+      console.error("Errore durante il fetch del log:", error);
+      const container = document.getElementById("log-container");
+      container.innerHTML = `
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <svg class="w-12 h-12 mx-auto mb-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="text-red-800 font-medium">Errore nel caricamento del registro</p>
+          <p class="text-red-600 text-sm mt-1">${error.message}</p>
+        </div>
+      `;
+    }
+  }
+
+  function formatTimestamp(timestamp) {
+    // Formato: YYYYMMDD_HHMMSS -> DD/MM/YYYY HH:MM:SS
+    const year = timestamp.substring(0, 4);
+    const month = timestamp.substring(4, 6);
+    const day = timestamp.substring(6, 8);
+    const hour = timestamp.substring(9, 11);
+    const minute = timestamp.substring(11, 13);
+    const second = timestamp.substring(13, 15);
+
+    return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
+  }
+
+  // Carica subito e poi ogni 5 secondi
+  fetchLog();
+  setInterval(fetchLog, 5000);
+</script>
+{% endblock %}

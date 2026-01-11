@@ -1,0 +1,164 @@
+{% extends "base.html" %} {% block title %}Home - Spyhole{% endblock %} {% block
+body %}
+<div class="min-h-screen">
+  <!-- Hero Section -->
+  <section
+    class="relative px-4 py-20 md:py-32 bg-gradient-to-b from-secondary to-background"
+  >
+    <div class="max-w-4xl mx-auto text-center animate-fade-in">
+      <div
+        class="inline-flex items-center justify-center w-20 h-20 mb-8 rounded-full bg-primary text-primary-foreground"
+      >
+        <svg
+          class="w-10 h-10"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+          />
+        </svg>
+      </div>
+
+      <h1
+        class="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-balance"
+      >
+        Smart Spyhole
+      </h1>
+
+      <p class="text-xl md:text-2xl text-muted-foreground mb-4 font-light">
+        CONTROLLO ACCESSI INTELLIGENTE
+      </p>
+
+      <p
+        class="text-base md:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed text-pretty"
+      >
+        Sistema di riconoscimento facciale per l'accesso sicuro all'ufficio.
+        Registra dipendenti e amministratori con autenticazione biometrica
+        avanzata.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/register"
+          class="inline-flex items-center justify-center px-8 py-4 text-base font-medium text-primary-foreground bg-primary rounded-lg hover:bg-primary/90 transition-all duration-200 hover:scale-105"
+        >
+          Registra Dipendente
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="px-4 py-20 bg-background">
+    <div class="max-w-6xl mx-auto">
+      <h2
+        class="text-3xl md:text-4xl font-bold text-center mb-16 tracking-tight"
+      >
+        Funzionalità Principali
+      </h2>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div
+          class="group p-8 bg-card border border-border rounded-2xl hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+        >
+          <div
+            class="w-14 h-14 mb-6 rounded-xl bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors"
+          >
+            <svg
+              class="w-7 h-7 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Riconoscimento Facciale</h3>
+          <p class="text-muted-foreground leading-relaxed">
+            Tecnologia avanzata di face recognition con dlib. Identifica
+            automaticamente dipendenti e amministratori autorizzati.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div
+          class="group p-8 bg-card border border-border rounded-2xl hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+        >
+          <div
+            class="w-14 h-14 mb-6 rounded-xl bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors"
+          >
+            <svg
+              class="w-7 h-7 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Log Completo</h3>
+          <p class="text-muted-foreground leading-relaxed">
+            Dashboard in tempo reale con tutti i tentativi di accesso:
+            consentiti e negati, con timestamp e ruolo utente.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div
+          class="group p-8 bg-card border border-border rounded-2xl hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+        >
+          <div
+            class="w-14 h-14 mb-6 rounded-xl bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors"
+          >
+            <svg
+              class="w-7 h-7 text-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Sicuro e Locale</h3>
+          <p class="text-muted-foreground leading-relaxed">
+            Database SQLite locale. I tuoi dati biometrici rimangono sul
+            dispositivo, mai condivisi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="px-4 py-12 bg-background border-t border-border">
+    <div class="max-w-6xl mx-auto text-center">
+      <p class="text-sm text-muted-foreground">
+        Spyhole © 2025 - Sistema di controllo accessi con riconoscimento
+        facciale
+      </p>
+    </div>
+  </footer>
+</div>
+
+{% endblock %}

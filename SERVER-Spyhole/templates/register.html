@@ -1,0 +1,550 @@
+{% extends "base.html" %} {% block title %}Registrazione Utente - Spyhole{%
+endblock %} {% block body %}
+<div class="min-h-screen bg-background py-12 px-4">
+  <div class="max-w-3xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-12 animate-fade-in">
+      <div
+        class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-primary text-primary-foreground"
+      >
+        <svg
+          class="w-8 h-8"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          />
+        </svg>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
+        Registrazione Utente Autorizzato
+      </h2>
+      <p class="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+        Carica una foto del volto (un solovolto nella foto). Puoi usare la
+        webcam o caricare un file.
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form
+      id="registerForm"
+      class="bg-white border border-border rounded-2xl p-8 shadow-sm"
+      novalidate
+    >
+      <!-- User Info -->
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <label for="username" class="block text-sm font-medium mb-2"
+            >Nome (username)</label
+          >
+          <input
+            id="username"
+            name="username"
+            type="text"
+            minlength="2"
+            maxlength="80"
+            required
+            placeholder="Es: Mario"
+            class="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+          />
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium mb-2"
+            >Password</label
+          >
+          <input
+            id="password"
+            name="password"
+            type="password"
+            minlength="4"
+            required
+            placeholder="Password per il login"
+            class="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all"
+          />
+        </div>
+      </div>
+
+      <div class="mb-8">
+        <label for="role" class="block text-sm font-medium mb-2">Ruolo</label>
+        <select
+          id="role"
+          name="role"
+          class="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all bg-white"
+        >
+          <option value="user">User (Utente)</option>
+          <option value="guest">Guest (Ospite)</option>
+          <option value="admin">Admin (Amministratore)</option>
+        </select>
+      </div>
+
+      <div class="h-px bg-border mb-8"></div>
+
+      <!-- Photo Upload -->
+      <div class="mb-8">
+        <p class="text-sm text-muted-foreground mb-4">
+          Formati accettati: JPG, JPEG, PNG (max 5MB)
+        </p>
+
+        <!-- File Input Button (più visibile) -->
+        <div class="mb-4">
+          <label
+            for="faceInput"
+            class="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-primary-foreground bg-primary rounded-lg hover:bg-primary/90 transition-all cursor-pointer"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            Scegli Foto (JPG, PNG)
+          </label>
+          <input
+            id="faceInput"
+            name="face_image"
+            type="file"
+            accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+            class="hidden"
+          />
+        </div>
+
+        <div
+          id="fileDrop"
+          class="border-2 border-dashed border-border rounded-xl p-12 text-center cursor-pointer hover:border-primary hover:bg-secondary/50 transition-all duration-200"
+        >
+          <svg
+            class="w-12 h-12 mx-auto mb-4 text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          <p class="text-muted-foreground font-medium">
+            oppure trascina qui una foto
+          </p>
+        </div>
+
+        <img
+          id="preview"
+          class="mt-6 max-w-full h-auto rounded-xl border border-border hidden"
+          alt="Anteprima immagine"
+        />
+
+        <!-- Controls -->
+        <div class="flex flex-wrap gap-3 mt-6">
+          <button
+            type="button"
+            id="useWebcam"
+            class="px-4 py-2 text-sm font-medium text-foreground bg-white border border-border rounded-lg hover:bg-secondary transition-all"
+          >
+            <svg
+              class="w-4 h-4 inline-block mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            Usa Webcam
+          </button>
+
+          <button
+            type="button"
+            id="stopWebcam"
+            class="px-4 py-2 text-sm font-medium text-foreground bg-white border border-border rounded-lg hover:bg-secondary transition-all"
+            disabled
+          >
+            <svg
+              class="w-4 h-4 inline-block mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
+              />
+            </svg>
+            Ferma Webcam
+          </button>
+
+          <button
+            type="button"
+            id="clearImage"
+            class="px-4 py-2 text-sm font-medium text-foreground bg-white border border-border rounded-lg hover:bg-secondary transition-all"
+          >
+            <svg
+              class="w-4 h-4 inline-block mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+            Rimuovi
+          </button>
+        </div>
+
+        <div class="mt-4 p-4 bg-secondary rounded-lg">
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            <strong class="text-foreground">Consigli:</strong> fonte ben
+            illuminato, niente occhiali scuri, uno solo volto nella foto.
+          </p>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div id="messages" class="mb-6"></div>
+
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button
+          type="submit"
+          id="submitBtn"
+          class="flex-1 px-6 py-4 text-base font-medium text-primary-foreground bg-primary rounded-lg hover:bg-primary/90 transition-all duration-200 hover:scale-[1.02]"
+        >
+          Registra
+        </button>
+        <a
+          href="{{ url_for('index') }}"
+          class="flex-1 px-6 py-4 text-base font-medium text-center text-foreground bg-white border border-border rounded-lg hover:bg-secondary transition-all duration-200"
+        >
+          Annulla
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<template id="videoTemplate">
+  <video
+    id="video"
+    class="w-full max-w-md mx-auto rounded-xl border border-border"
+    autoplay
+    playsinline
+  ></video>
+</template>
+
+<script>
+  (function () {
+    const faceInput = document.getElementById("faceInput");
+    const fileDrop = document.getElementById("fileDrop");
+    const preview = document.getElementById("preview");
+    const useWebcam = document.getElementById("useWebcam");
+    const stopWebcam = document.getElementById("stopWebcam");
+    const clearImage = document.getElementById("clearImage");
+    const submitBtn = document.getElementById("submitBtn");
+    const messages = document.getElementById("messages");
+    const registerForm = document.getElementById("registerForm");
+    let currentBlob = null;
+    let stream = null;
+
+    const MAX_BYTES = 5 * 1024 * 1024;
+
+    function showMessage(text, type) {
+      const bgColor =
+        type === "error"
+          ? "bg-red-50 border-red-200 text-red-800"
+          : "bg-green-50 border-green-200 text-green-800";
+      messages.innerHTML = `<div class="p-4 rounded-lg border ${bgColor}">${text}</div>`;
+    }
+
+    function clearMessage() {
+      messages.innerHTML = "";
+    }
+
+    fileDrop.addEventListener("click", () => faceInput.click());
+    fileDrop.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") faceInput.click();
+    });
+    fileDrop.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      fileDrop.classList.add("border-primary", "bg-secondary/50");
+    });
+    fileDrop.addEventListener("dragleave", () => {
+      fileDrop.classList.remove("border-primary", "bg-secondary/50");
+    });
+    fileDrop.addEventListener("drop", (e) => {
+      e.preventDefault();
+      fileDrop.classList.remove("border-primary", "bg-secondary/50");
+      const f = e.dataTransfer.files[0];
+      if (f) handleFile(f);
+    });
+
+    faceInput.addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (f) handleFile(f);
+    });
+
+    function handleFile(file) {
+      clearMessage();
+
+      // Validazione tipo file
+      const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!validTypes.includes(file.type)) {
+        showMessage("Formato non valido. Usa solo JPG, JPEG o PNG.", "error");
+        faceInput.value = ""; // Reset input
+        return;
+      }
+
+      // Validazione dimensione
+      if (file.size > MAX_BYTES) {
+        showMessage(
+          "File troppo grande (max 5MB). Dimensione attuale: " +
+            (file.size / 1024 / 1024).toFixed(2) +
+            "MB",
+          "error"
+        );
+        faceInput.value = ""; // Reset input
+        return;
+      }
+
+      // Mostra messaggio di caricamento
+      showMessage("⏳ Caricamento foto in corso...", "success");
+
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        preview.src = ev.target.result;
+        preview.classList.remove("hidden");
+        currentBlob = dataURLtoBlob(ev.target.result);
+        showMessage(
+          "Foto caricata: " +
+            file.name +
+            " (" +
+            (file.size / 1024).toFixed(0) +
+            " KB)",
+          "success"
+        );
+      };
+      reader.onerror = () => {
+        showMessage("Errore durante la lettura del file.", "error");
+        faceInput.value = "";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function dataURLtoBlob(dataurl) {
+      const arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      return new Blob([u8arr], { type: mime });
+    }
+
+    useWebcam.addEventListener("click", async () => {
+      clearMessage();
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showMessage("Webcam non disponibile in questo browser.", "error");
+        return;
+      }
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: false,
+        });
+        const tpl = document.getElementById("videoTemplate");
+        const video = tpl.content.querySelector("video").cloneNode(true);
+        fileDrop.replaceWith(video);
+        video.id = "video";
+        video.srcObject = stream;
+        useWebcam.disabled = true;
+        stopWebcam.disabled = false;
+
+        video.addEventListener("click", () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(video, 0, 0);
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+          preview.src = dataUrl;
+          preview.classList.remove("hidden");
+          currentBlob = dataURLtoBlob(dataUrl);
+          stopStream();
+        });
+      } catch (err) {
+        showMessage(
+          "Impossibile accedere alla webcam: " + err.message,
+          "error"
+        );
+      }
+    });
+
+    stopWebcam.addEventListener("click", () => {
+      stopStream();
+      resetFileDrop();
+    });
+
+    function stopStream() {
+      if (stream) {
+        stream.getTracks().forEach((t) => t.stop());
+        stream = null;
+      }
+      useWebcam.disabled = false;
+      stopWebcam.disabled = true;
+    }
+
+    clearImage.addEventListener("click", () => {
+      currentBlob = null;
+      preview.src = "";
+      preview.classList.add("hidden");
+      resetFileDrop();
+      clearMessage();
+    });
+
+    function resetFileDrop() {
+      const newDrop = document.createElement("div");
+      newDrop.id = "fileDrop";
+      newDrop.className =
+        "border-2 border-dashed border-border rounded-xl p-12 text-center cursor-pointer hover:border-primary hover:bg-secondary/50 transition-all duration-200";
+      newDrop.innerHTML = `
+        <svg class="w-12 h-12 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+        </svg>
+        <p class="text-muted-foreground font-medium">Clicca o trascina qui per caricare una foto</p>
+      `;
+      newDrop.tabIndex = 0;
+      const old =
+        document.querySelector("#fileDrop") || document.querySelector("video");
+      if (old) old.replaceWith(newDrop);
+      newDrop.addEventListener("click", () => faceInput.click());
+      newDrop.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        newDrop.classList.add("border-primary", "bg-secondary/50");
+      });
+      newDrop.addEventListener("dragleave", () => {
+        newDrop.classList.remove("border-primary", "bg-secondary/50");
+      });
+      newDrop.addEventListener("drop", (e) => {
+        e.preventDefault();
+        newDrop.classList.remove("border-primary", "bg-secondary/50");
+        const f = e.dataTransfer.files[0];
+        if (f) handleFile(f);
+      });
+    }
+
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessage();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const role = document.getElementById("role").value;
+
+      // Validazioni con messaggi chiari
+      if (!username || username.length < 2) {
+        showMessage(
+          "Inserisci un nome utente valido (minimo 2 caratteri).",
+          "error"
+        );
+        return;
+      }
+      if (!password || password.length < 4) {
+        showMessage(
+          "Inserisci una password valida (minimo 4 caratteri).",
+          "error"
+        );
+        return;
+      }
+      if (!currentBlob) {
+        showMessage(
+          "Devi caricare una foto del volto prima di registrarti.",
+          "error"
+        );
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Registrazione in corso...";
+      showMessage("Analisi del volto e creazione account...", "success");
+
+      try {
+        // Invia tutto in una singola richiesta con FormData
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+        formData.append("role", role);
+        formData.append("face_photo", currentBlob, `${username}.jpg`);
+
+        const response = await fetch("/register", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          showMessage(
+            data.message + " Reindirizzamento al login...",
+            "success"
+          );
+          registerForm.reset();
+          currentBlob = null;
+          preview.src = "";
+          preview.classList.add("hidden");
+
+          // Redirect to login after 2 seconds
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
+        } else {
+          showMessage(
+            "Errore: " + (data.message || "Registrazione fallita"),
+            "error"
+          );
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Registra";
+        }
+      } catch (err) {
+        showMessage("Errore di connessione: " + err.message, "error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Registra";
+      }
+    });
+  })();
+</script>
+{% endblock %}
