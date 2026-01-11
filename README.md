@@ -3,7 +3,7 @@
 **Progetto di Architettura e Progetto di Calcolatori (APC)**
 
 👨‍💼 **Autori**: Andrea Esposito (M63001650) | Francesco Riccio (M63001646)  
-👨‍🏫 **Relatore**: Prof. Nicola Mazzocca
+👨‍🏫 **Professore**: Prof. Nicola Mazzocca
 
 ---
 
