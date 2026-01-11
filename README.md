@@ -1,25 +1,25 @@
-# 🇮🇹 🔐 SPYHOLE - Sistema di Controllo Accessi con Riconoscimento Facciale
+# 🇮🇹 SPYHOLE - Sistema di Controllo Accessi con Riconoscimento Facciale
 
 **Progetto di Architettura e Progetto di Calcolatori (APC)**
 
-👨‍💼 **Autori**: Andrea Esposito (M63001650) | Francesco Riccio (M63001646)  
-👨‍🏫 **Relatore**: Prof. Nicola Mazzocca
+**Autori**: Andrea Esposito (M63001650) | Francesco Riccio (M63001646)  
+**Professore**: Prof. Nicola Mazzocca
 
 ---
 
-## 📋 Panoramica del Sistema
+## Panoramica del Sistema
 
 **Spyhole** è un sistema di controllo accessi a **due fattori** che combina:
-- 🎥 **Riconoscimento facciale** tramite ESP32-CAM e AI
-- 🔐 **Codice PIN Bluetooth** come fallback sicuro
-- 📊 **Dashboard web** per monitorare accessi in tempo reale
-- 🔑 **Gestione utenti** con registrazione e autenticazione
+- **Riconoscimento facciale** tramite ESP32-CAM e AI
+- **Codice PIN Bluetooth** come fallback sicuro
+- **Dashboard web** per monitorare accessi in tempo reale
+- **Gestione utenti** con registrazione e autenticazione
 
 L'intero sistema è gestito da una **dashboard web** che permette di visualizzare gli accessi in tempo reale e gestire gli utenti registrati.
 
 ---
 
-## 🏗️ Architettura del Sistema
+## Architettura del Sistema
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -47,19 +47,7 @@ L'intero sistema è gestito da una **dashboard web** che permette di visualizzar
 
 ---
 
-## ⚙️ Componenti Hardware
-
-| Componente | Modello | Ruolo |
-|-----------|---------|-------|
-| **Microcontrollore** | STM32F303 Discovery | Controller principale, gestisce flusso logico |
-| **Fotocamera** | ESP32-CAM (OV2640) | Acquisisce immagini per riconoscimento facciale |
-| **Comunicazione** | Modulo Bluetooth HC-05 | Riceve comandi PIN dallo smartphone |
-| **Sblocco** | Servomotore SG90 | Aziona la serratura (180° di rotazione) |
-| **Feedback** | LED RGB + Resistenze 330Ω | Indica lo stato del sistema |
-
----
-
-## 📱 Flusso di Lavoro
+## Flusso di Lavoro
 
 ### 1️⃣ **Registrazione/Login**
 L'utente si autentica nella webapp o viene registrato per la prima volta.
@@ -132,7 +120,7 @@ In caso di troppi errori (> 3 tentativi):
 
 ---
 
-## 📡 Comunicazione UART & Bluetooth
+## Comunicazione UART & Bluetooth
 
 ### Configurazione Hardware
 - **STM32 ↔ ESP32-CAM**: UART @ **115200 baud** (immagini ad alta velocità)
@@ -169,7 +157,7 @@ HC-05 (UART @ 9600 baud)
 
 ---
 
-## 🔊 Moduli Chiave
+## Moduli Chiave
 
 ### **Bluetooth HC-05**
 - Riceve comandi via Serial Port Profile (SPP)
@@ -206,7 +194,7 @@ Frequenza: 50 Hz (20 ms per ciclo)
 
 ---
 
-## ⚡ Sistema di Interruzioni
+## Sistema di Interruzioni
 
 Il sistema utilizza interruzioni per gestire eventi in modo **efficiente** senza attese attive:
 
@@ -230,7 +218,7 @@ Il sistema utilizza interruzioni per gestire eventi in modo **efficiente** senza
 
 ---
 
-## 🚀 Struttura dei Progetti
+## Struttura dei Progetti
 
 ```
 📦 72_Esposito_Riccio/
@@ -260,34 +248,9 @@ Il sistema utilizza interruzioni per gestire eventi in modo **efficiente** senza
 
 ---
 
-## 📊 Stack Tecnologico
 
-| Layer | Tecnologia | Versione | Utilizzo |
-|-------|-----------|----------|----------|
-| **Backend** | Flask | 3.1.2 | Web framework REST API |
-| **ORM** | Flask-SQLAlchemy | 3.1.1 | Object-Relational Mapping |
-| **Face Recognition** | face_recognition | 1.3.0 | Riconoscimento facciale (dlib) |
-| **Computer Vision** | OpenCV | 4.12.0 | Elaborazione immagini |
-| **Frontend** | Tailwind CSS | 3.x | Styling responsivo |
-| **Template Engine** | Jinja2 | 3.1.6 | Rendering HTML dinamico |
-| **Database** | SQLite | 3.x | Persistenza dati |
-| **Microcontrollore** | STM32F303 | ARM Cortex-M4 | Controller principale |
-| **Fotocamera** | ESP32-CAM | Dual-core 240MHz | Acquisizione immagini |
 
----
-
-## 🔐 Sicurezza
-
-- ✅ **Face encoding** salvato nel database (non foto original)
-- ✅ **Hashing password** con werkzeug security
-- ✅ **Lockout progressivo** dopo tentativi falliti
-- ✅ **Comunicazione UART** (locale, non pubblica)
-- ✅ **PIN Bluetooth** come secondo fattore
-- ✅ **Token session** per dashboard web
-
----
-
-## 📥 Installazione & Setup
+## Installazione & Setup
 
 ### **Backend Server**
 
@@ -326,7 +289,7 @@ Server disponibile su: **http://localhost:5000**
 
 ---
 
-## 🎯 Caso d'Uso: Accesso Completo
+## Caso d'Uso: Accesso Completo
 
 ```
 1️⃣ Utente avvicina volto a ESP32-CAM
@@ -343,72 +306,13 @@ Server disponibile su: **http://localhost:5000**
 ```
 
 ---
-
-## 📝 API REST
-
-### POST `/upload`
-Invia immagine per riconoscimento facciale
-
-**Request**: raw JPEG bytes o multipart/form-data  
-**Response**:
-```json
-{
-  "status": "ok",
-  "name": "Mario",
-  "filename": "image_20251104_123456.jpg"
-}
-```
-
-### GET `/api/log`
-Recupera log accessi
-
-**Response**:
-```json
-[
-  {
-    "timestamp": "20251104_123456",
-    "filename": "image.jpg",
-    "recognized": true,
-    "name": "Mario"
-  }
-]
-```
-
----
-
-## 📚 Documentazione Aggiuntiva
-
-Per dettagli completi su:
-- **Database schema**: vedi [DOCUMENTATION.md](SERVER-Spyhole/DOCUMENTATION.md)
-- **Setup server**: vedi [SERVER-Spyhole/README.md](SERVER-Spyhole/README.md)
-- **Configurazione hardware**: vedi [Spyhole Presentation.pdf](Spyhole%20Presentation.pdf)
-
----
-
-## 🎓 Progetto Accademico
-
-**Università**: Università degli Studi di Napoli Federico II  
-**Corso**: Architettura e Progetto di Calcolatori (APC)  
-**Anno Accademico**: 2024/2025  
-**Docente**: Prof. Nicola Mazzocca
-
----
-
-## 📸 Media
+## Media
 
 - 📹 **Video Demo**: [VIDEO-PROGETTO.MOV](VIDEO-PROGETTO.MOV)
 - 🎞️ **Presentazione**: [Spyhole Presentation.pdf](Spyhole%20Presentation.pdf) / [PowerPoint](Spyhole%20Presentation.pptx)
 
 ---
 
-## 🤝 Autori
-
-| Nome | Matricola | Ruolo |
-|------|-----------|-------|
-| **Andrea Esposito** | M63001650 | Firmware STM32 + Hardware |
-| **Francesco Riccio** | M63001646 | Backend Flask + Face Recognition |
-
----
 
 ## 📄 Licenza
 
@@ -421,28 +325,28 @@ Progetto universitario - Uso libero per scopi educativi.
 
 ---
 
-# 🇬🇧 🔐 SPYHOLE - Face Recognition Access Control System
+# 🇬🇧 SPYHOLE - Face Recognition Access Control System
 
 **Computer Architecture and Design (APC) Project**
 
-👨‍💼 **Authors**: Andrea Esposito (M63001650) | Francesco Riccio (M63001646)  
-👨‍🏫 **Supervisor**: Prof. Nicola Mazzocca
+**Authors**: Andrea Esposito (M63001650) | Francesco Riccio (M63001646)  
+**Professorr**: Prof. Nicola Mazzocca
 
 ---
 
-## 📋 System Overview
+## System Overview
 
 **Spyhole** is a **two-factor** access control system that combines:
-- 🎥 **Face recognition** via ESP32-CAM and AI
-- 🔐 **Bluetooth PIN code** as secure fallback
-- 📊 **Web dashboard** for real-time access monitoring
-- 🔑 **User management** with registration and authentication
+- **Face recognition** via ESP32-CAM and AI
+- **Bluetooth PIN code** as secure fallback
+- **Web dashboard** for real-time access monitoring
+- **User management** with registration and authentication
 
 The entire system is managed by a **web dashboard** that allows real-time access monitoring and registered user management.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -470,7 +374,7 @@ The entire system is managed by a **web dashboard** that allows real-time access
 
 ---
 
-## ⚙️ Hardware Components
+## Hardware Components
 
 | Component | Model | Role |
 |-----------|---------|-------|
@@ -482,7 +386,7 @@ The entire system is managed by a **web dashboard** that allows real-time access
 
 ---
 
-## 📱 Workflow
+## Workflow
 
 ### 1️⃣ **Registration/Login**
 User authenticates in the webapp or gets registered for the first time.
@@ -555,7 +459,7 @@ In case of too many errors (> 3 attempts):
 
 ---
 
-## 📡 UART & Bluetooth Communication
+## UART & Bluetooth Communication
 
 ### Hardware Configuration
 - **STM32 ↔ ESP32-CAM**: UART @ **115200 baud** (high-speed images)
@@ -592,7 +496,7 @@ HC-05 (UART @ 9600 baud)
 
 ---
 
-## 🔊 Key Modules
+## Key Modules
 
 ### **Bluetooth HC-05**
 - Receives commands via Serial Port Profile (SPP)
@@ -653,7 +557,7 @@ The system uses interrupts to handle events **efficiently** without active waits
 
 ---
 
-## 🚀 Project Structure
+## Project Structure
 
 ```
 📦 72_Esposito_Riccio/
@@ -683,34 +587,7 @@ The system uses interrupts to handle events **efficiently** without active waits
 
 ---
 
-## 📊 Technology Stack
-
-| Layer | Technology | Version | Usage |
-|-------|-----------|----------|----------|
-| **Backend** | Flask | 3.1.2 | REST API web framework |
-| **ORM** | Flask-SQLAlchemy | 3.1.1 | Object-Relational Mapping |
-| **Face Recognition** | face_recognition | 1.3.0 | Face recognition (dlib) |
-| **Computer Vision** | OpenCV | 4.12.0 | Image processing |
-| **Frontend** | Tailwind CSS | 3.x | Responsive styling |
-| **Template Engine** | Jinja2 | 3.1.6 | Dynamic HTML rendering |
-| **Database** | SQLite | 3.x | Data persistence |
-| **Microcontroller** | STM32F303 | ARM Cortex-M4 | Main controller |
-| **Camera** | ESP32-CAM | Dual-core 240MHz | Image acquisition |
-
----
-
-## 🔐 Security
-
-- ✅ **Face encoding** saved in database (not original photo)
-- ✅ **Password hashing** with werkzeug security
-- ✅ **Progressive lockout** after failed attempts
-- ✅ **UART communication** (local, not public)
-- ✅ **Bluetooth PIN** as second factor
-- ✅ **Session tokens** for web dashboard
-
----
-
-## 📥 Installation & Setup
+## Installation & Setup
 
 ### **Backend Server**
 
@@ -730,26 +607,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Server available at: **http://localhost:5000**
-
-### **STM32 Firmware**
-
-1. Open project in **STM32CubeIDE**
-2. Configure UART fusions (115200 baud for ESP32, 9600 for HC-05)
-3. Compile and upload to microcontroller
-4. Connect hardware components as per schematic
-
-### **Arduino ESP32-CAM**
-
-1. Open Arduino IDE
-2. Install board support: `esp32 by Espressif Systems`
-3. Select: `Tools > Board > ESP32 > AI Thinker ESP32-CAM`
-4. Open `PROGETTO-CAM.ino`
-5. Upload sketch (USB-Serial converter required)
-
----
-
-## 🎯 Use Case: Complete Access
+## Use Case: Complete Access
 
 ```
 1️⃣ User approaches ESP32-CAM with face
@@ -765,41 +623,10 @@ Server available at: **http://localhost:5000**
 1️⃣1️⃣ RGB LED on (green) → Access granted ✅
 ```
 
----
-
-## 📝 REST API
-
-### POST `/upload`
-Send image for face recognition
-
-**Request**: raw JPEG bytes or multipart/form-data  
-**Response**:
-```json
-{
-  "status": "ok",
-  "name": "Mario",
-  "filename": "image_20251104_123456.jpg"
-}
-```
-
-### GET `/api/log`
-Retrieve access log
-
-**Response**:
-```json
-[
-  {
-    "timestamp": "20251104_123456",
-    "filename": "image.jpg",
-    "recognized": true,
-    "name": "Mario"
-  }
-]
-```
 
 ---
 
-## 📚 Additional Documentation
+## Additional Documentation
 
 For complete details on:
 - **Database schema**: see [DOCUMENTATION.md](SERVER-Spyhole/DOCUMENTATION.md)
@@ -808,30 +635,13 @@ For complete details on:
 
 ---
 
-## 🎓 Academic Project
-
-**University**: Università degli Studi di Napoli Federico II  
-**Course**: Computer Architecture and Design (APC)  
-**Academic Year**: 2024/2025  
-**Instructor**: Prof. Nicola Mazzocca
-
----
-
-## 📸 Media
+## Media
 
 - 📹 **Demo Video**: [VIDEO-PROGETTO.MOV](VIDEO-PROGETTO.MOV)
 - 🎞️ **Presentation**: [Spyhole Presentation.pdf](Spyhole%20Presentation.pdf) / [PowerPoint](Spyhole%20Presentation.pptx)
 
 ---
 
-## 🤝 Authors
-
-| Name | Student ID | Role |
-|------|-----------|-------|
-| **Andrea Esposito** | M63001650 | STM32 Firmware + Hardware |
-| **Francesco Riccio** | M63001646 | Flask Backend + Face Recognition |
-
----
 
 ## 📄 License
 
